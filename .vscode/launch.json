@@ -1,0 +1,25 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Development",
+            "program": "${workspaceFolder}\\main.js",
+            "cwd": "C:\\Development\\Standard\\Applications\\ERP",
+            "console": "integratedTerminal"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Installed",
+            "program": "${workspaceFolder}\\main.js",
+            "cwd": "C:\\Program Files (x86)\\Microarea\\Mago4\\Standard\\Applications\\ERP",
+            "console": "integratedTerminal"
+        }
+    ]
+}
