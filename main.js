@@ -7,7 +7,7 @@ const inquirer = require('inquirer');
 const profiles = require('./profiles');
 const path = require('path');
 const copydir = require('copy-dir');
-const mkdir = require('./mkDirByPathSync');
+const fsStuff = require('./fs-stuff');
 const fs = require('fs');
 
 
@@ -30,7 +30,7 @@ inquirer.prompt([
     {
         name: 'selectedProfiles',
         type: 'checkbox',
-        message: 'select the profiles to include',
+        message: 'Select the profiles to include',
         choices: (answers) => { return profiles.scan(currentPath, answers.profileHash); },
         validate: (input, answers) => { 
             if (input.length == 0)
@@ -40,7 +40,7 @@ inquirer.prompt([
     },
     {
         name: 'destinationFolder',
-        message: 'in which folder the profiles will be packed?',
+        message: 'In which folder the profiles will be packed?',
         validate: (input, answers) => { 
             if (!input) {
                 return "Empty name not allowed";
@@ -49,6 +49,15 @@ inquirer.prompt([
                 return "Parent folder does not exist.";
             }
             return true;            
+        }
+    },
+    {
+        name: 'deleteExisting',
+        message: 'Target folder already exists, do you want to erase it first?',
+        type: 'confirm',
+        default: false,
+        when: (answers) => { 
+            return fs.existsSync(answers.destinationFolder);
         }
     }//,
     // {
@@ -60,9 +69,12 @@ inquirer.prompt([
 ]).then( answers => {
     var allProfiles = [];
     allProfiles.push(...answers.selectedProfiles,...profiles.clientDocsProfiles(answers.selectedProfiles));
+    if (answers.deleteExisting) {
+        fsStuff.rimraf(answers.destinationFolder);
+    }
     console.log("Copying profiles ...");
     allProfiles.forEach(p => {
-        mkdir(path.join(answers.destinationFolder, p));
+        fsStuff.mkDirByPathSync(path.join(answers.destinationFolder, p));
         console.log(p);
         copydir.sync(path.join(currentPath, p), path.join(answers.destinationFolder, p));
     });
