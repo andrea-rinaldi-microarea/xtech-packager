@@ -22,6 +22,10 @@ if (!isStandard && !isCustom) {
     error("Current folder must be inside the 'Standard' or 'Custom' of a TaskBuilder Application\ne.g.:\n<your instance>\\Standard\\Applications\\<your app>\n<your instance>\\Custom\\Companies\\<your company>\\Applications\\<your app>");
 }
 
+var appName = path.basename(currentPath);
+process.chdir('..');
+currentPath = process.cwd();
+
 inquirer.prompt([
     {
         name: 'profileHash',
@@ -31,12 +35,18 @@ inquirer.prompt([
         name: 'selectedProfiles',
         type: 'checkbox',
         message: 'Select the profiles to include',
-        choices: (answers) => { return profiles.scan(currentPath, answers.profileHash); },
+        choices: (answers) => { return profiles.scan(appName, answers.profileHash); },
         validate: (input, answers) => { 
             if (input.length == 0)
                 return " Select at least one profile";
             return true;
         }
+    },
+    {
+        name: 'allApps',
+        message: 'Collect ClientDoc profiles from other apps also?',
+        type: 'confirm',
+        default: true
     },
     {
         name: 'destinationFolder',
@@ -68,7 +78,7 @@ inquirer.prompt([
     // }
 ]).then( answers => {
     var allProfiles = [];
-    allProfiles.push(...answers.selectedProfiles,...profiles.clientDocsProfiles(answers.selectedProfiles));
+    allProfiles.push(...answers.selectedProfiles,...profiles.clientDocsProfiles(answers.allApps ? '*' : appName, answers.selectedProfiles));
     if (answers.deleteExisting) {
         fsStuff.rimraf(answers.destinationFolder);
     }
