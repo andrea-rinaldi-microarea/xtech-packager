@@ -20,6 +20,14 @@
             "program": "${workspaceFolder}\\main.js",
             "cwd": "C:\\Program Files (x86)\\Microarea\\Mago4\\Standard\\Applications\\ERP",
             "console": "integratedTerminal"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Custom",
+            "program": "${workspaceFolder}\\main.js",
+            "cwd": "C:\\Development\\Custom\\Companies\\Test-Development\\Applications\\ERP",
+            "console": "integratedTerminal"
         }
     ]
 }

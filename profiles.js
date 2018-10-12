@@ -4,15 +4,16 @@ const error = require('./error');
 
 class Profiles {
     
-    scan(appName, filter) {
-        var profiles = glob.sync(path.join(appName, '*', 'ModuleObjects', '*', 'ExportProfiles', filter), { nocase: true });
+    scan(appName, isStandard, filter) {
+        var profiles = isStandard ? glob.sync(path.join(appName, '*', 'ModuleObjects', '*', 'ExportProfiles', filter), { nocase: true }) :
+                                    glob.sync(path.join(appName, '*', 'ModuleObjects', '*', 'ExportProfiles', 'AllUsers', filter), { nocase: true });
         if (profiles.length == 0) {
             error("No matching profiles found.");
         }
         return profiles;
     }
 
-    clientDocsProfiles(appName, profiles) {
+    clientDocsProfiles(appName, isStandard, profiles) {
         var cdProfiles = [];
         for (var p = 0; p < profiles.length; p++) {
             var doc = profiles[p].substring(
@@ -20,7 +21,10 @@ class Profiles {
                 profiles[p].lastIndexOf("/ExportProfiles")
             );
             var prof = profiles[p].substring(profiles[p].lastIndexOf("/") + 1);
-            cdProfiles.push(...glob.sync(path.join(appName, '*', 'ModuleObjects', '*', 'ExportProfiles', doc, prof)));
+            if (isStandard)
+                cdProfiles.push(...glob.sync(path.join(appName, '*', 'ModuleObjects', '*', 'ExportProfiles', doc, prof)));
+            else
+                cdProfiles.push(...glob.sync(path.join(appName, '*', 'ModuleObjects', '*', 'ExportProfiles', 'AllUsers', doc, prof)));
         }
         return cdProfiles;
     }

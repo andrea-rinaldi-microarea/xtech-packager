@@ -35,7 +35,7 @@ inquirer.prompt([
         name: 'selectedProfiles',
         type: 'checkbox',
         message: 'Select the profiles to include',
-        choices: (answers) => { return profiles.scan(appName, answers.profileHash); },
+        choices: (answers) => { return profiles.scan(appName, isStandard, answers.profileHash); },
         validate: (input, answers) => { 
             if (input.length == 0)
                 return " Select at least one profile";
@@ -78,7 +78,7 @@ inquirer.prompt([
     // }
 ]).then( answers => {
     var allProfiles = [];
-    allProfiles.push(...answers.selectedProfiles,...profiles.clientDocsProfiles(answers.allApps ? '*' : appName, answers.selectedProfiles));
+    allProfiles.push(...answers.selectedProfiles,...profiles.clientDocsProfiles(answers.allApps ? '*' : appName, isStandard, answers.selectedProfiles));
     if (answers.deleteExisting) {
         fsStuff.rimraf(answers.destinationFolder);
     }
