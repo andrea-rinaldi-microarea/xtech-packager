@@ -1,6 +1,8 @@
 # xtech-packager
 Allow you to pack in a zip file one or some XTech profiles, even when spanned over multiple modules and applications.
 
+## Installation
+
 Clone or download, then
 ```
 npm install
@@ -9,7 +11,10 @@ To use from the command line:
 ```
 npm link
 ```
-Then from any path, invoke as:
+This is mandatory as you will need to invoke the command from a folder inside the Standard or Custom TB subfolder structure.
+
+## Usage
+From any path, invoke as:
 ```
 xtech-packager
 -- or --
