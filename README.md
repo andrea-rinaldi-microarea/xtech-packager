@@ -13,6 +13,8 @@ npm link
 ```
 This is mandatory as you will need to invoke the command from a folder inside the Standard or Custom TB subfolder structure.
 
+*Note on npm link*: for the command to be correctly generated, the starting source (i.e.: `main.js`) **MUST** start with `#!/usr/bin/env node`) 
+
 ## Usage
 From any path, invoke as:
 ```
